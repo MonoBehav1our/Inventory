@@ -1,4 +1,5 @@
 ﻿using Model.Inventory.Saves;
+using System.Reflection;
 using UnityEngine;
 using System;
 
@@ -120,11 +121,6 @@ namespace Model.Inventory
             if (removeAmount < 1) 
                 throw new InvalidOperationException("Amount for remove should be more than 0");
 
-            //var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
-            //var type = assembly.GetType("UnityEditor.LogEntries");
-            //var method = type.GetMethod("Clear");
-            //method.Invoke(new object(), null);
-
             int i = slotNumber / MainSlotsGrid.GetLength(1);
             int j = slotNumber % MainSlotsGrid.GetLength(1);
 
@@ -235,6 +231,7 @@ namespace Model.Inventory
                         if (item.AmmoType == type)
                         {
                             MainSlotsGrid[i,j].Amount -= 1;
+                            InventorySaver.Save(new InventoryGridData(this));
                             return true;
                         }
                             
@@ -262,18 +259,22 @@ namespace Model.Inventory
 
         public void WriteDebugInfo()
         {
-            
-            //Debug.Log("DEBUG");
-            //Debug.Log(HeadSlot.ItemID + ": " + HeadSlot.Amount);
-            //Debug.Log(OutwearSlot.ItemID + ": " + OutwearSlot.Amount);
+            var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+            var type = assembly.GetType("UnityEditor.LogEntries");
+            var method = type.GetMethod("Clear");
+            method.Invoke(new object(), null);
 
-            //for (int i = 0; i < MainSlotsGrid.GetLength(0); i++)
-            //{
-            //    for (int j = 0; j < MainSlotsGrid.GetLength(1); j++)
-            //    {
-            //        Debug.Log(MainSlotsGrid[i, j].ItemID + ": " + MainSlotsGrid[i, j].Amount);
-            //    }
-            //}
+            Debug.Log("DEBUG");
+            Debug.Log(HeadSlot.ItemID + ": " + HeadSlot.Amount);
+            Debug.Log(OutwearSlot.ItemID + ": " + OutwearSlot.Amount);
+
+            for (int i = 0; i < MainSlotsGrid.GetLength(0); i++)
+            {
+                for (int j = 0; j < MainSlotsGrid.GetLength(1); j++)
+                {
+                    Debug.Log(MainSlotsGrid[i, j].ItemID + ": " + MainSlotsGrid[i, j].Amount);
+                }
+            }
         }
 
         private void InitInventorySlots()

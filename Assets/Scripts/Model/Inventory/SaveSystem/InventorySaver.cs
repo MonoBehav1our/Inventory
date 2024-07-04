@@ -1,33 +1,52 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 
 namespace Model.Inventory.Saves
 {
     public static class InventorySaver
     {
-        private const string KEY1 = "INVENTORY_DATA";
+        private static string PATH = Application.persistentDataPath + "/LOCAL_DATA.txt";
 
         public static void Save(InventoryGridData data)
         {
             string json = JsonUtility.ToJson(data);
-            PlayerPrefs.SetString(KEY1, json);
+            StreamWriter sw = new StreamWriter(PATH, false);
+            Debug.Log(PATH);
+            Debug.Log(json);
+            sw.Write(json);
+            sw.Close();
+            //PlayerPrefs.SetString(PATH, json);
         }
 
         public static InventoryGridData Load()
         {
-            if (PlayerPrefs.HasKey(KEY1))
+            //if (PlayerPrefs.HasKey(PATH))
+            //{
+            //    string save = PlayerPrefs.GetString(PATH);
+            //    InventoryGridData data = JsonUtility.FromJson<InventoryGridData>(save);
+            //    return data;
+            //}
+            //else
+            //{
+
+            //}
+
+            if (File.Exists(PATH))
             {
-                string save = PlayerPrefs.GetString(KEY1);
-                InventoryGridData data = JsonUtility.FromJson<InventoryGridData>(save);
+                StreamReader streamReader = new StreamReader(PATH);
+                string json = streamReader.ReadToEnd();
+
+                InventoryGridData data = JsonUtility.FromJson<InventoryGridData>(json);
                 return data;
             }
             else
             {
                 InventoryGrid inventory = new InventoryGrid();
-                var data = new InventoryGridData(inventory);
+                var data = new InventoryGridData(inventory, true);
                 Save(data);
 
                 return data;
-            }
+            }            
         }
     }
 }
