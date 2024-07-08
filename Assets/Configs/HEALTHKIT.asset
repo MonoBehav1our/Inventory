@@ -15,6 +15,6 @@ MonoBehaviour:
   <ID>k__BackingField: HEALTH_KIT
   <Name>k__BackingField: health kit
   <Sprite>k__BackingField: {fileID: 21300000, guid: a9bdc3edf13f30b4a87e429a3dd93fdb, type: 3}
-  <MaxAmount>k__BackingField: 10
-  <Height>k__BackingField: 2
+  <MaxAmount>k__BackingField: 6
+  <Height>k__BackingField: 1
   <HealthValue>k__BackingField: 50
